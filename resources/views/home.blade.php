@@ -375,6 +375,55 @@
                 </div>
             </div>
             
+            <!-- 菜单数据 -->
+            <div class="section">
+                <h2>📋 菜单数据 ({{ isset($menuData) ? $menuData->count() : 0 }} 条记录)</h2>
+                <div class="data-table">
+                    <table class="users-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>父级ID</th>
+                                <th>排序</th>
+                                <th>标题</th>
+                                <th>图标</th>
+                                <th>URI</th>
+                                <th>权限</th>
+                                <th>状态</th>
+                                <th>创建时间</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if(isset($menuData) && $menuData->count() > 0)
+                                @foreach($menuData as $menu)
+                                    <tr>
+                                        <td><strong>{{ $menu->id }}</strong></td>
+                                        <td>{{ $menu->parent_id ?: '根菜单' }}</td>
+                                        <td>{{ $menu->order ?: 0 }}</td>
+                                        <td>{{ $menu->title ?: '未设置' }}</td>
+                                        <td>{{ $menu->icon ?: '无' }}</td>
+                                        <td>{{ $menu->uri ?: '无' }}</td>
+                                        <td>{{ $menu->permission ?: '无' }}</td>
+                                        <td>
+                                            <span class="status-success">
+                                                正常
+                                            </span>
+                                        </td>
+                                        <td>{{ $menu->created_at ? \Carbon\Carbon::parse($menu->created_at)->format('Y-m-d H:i:s') : '未知' }}</td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="9" style="text-align: center; color: #666; padding: 2rem;">
+                                        暂无菜单数据
+                                    </td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
             <!-- 表结构信息 -->
             @if(isset($tableStructures) && count($tableStructures) > 0)
                 <div class="section">

@@ -63,6 +63,15 @@ class HomeController extends Controller
             // 获取 admin_users 表的原始数据
             $adminUsersData = DB::table('admin_users')->get();
             
+            // 获取菜单表数据
+            $menuData = collect([]);
+            try {
+                $menuData = DB::table('admin_menu')->get();
+            } catch (\Exception $e) {
+                // 如果表不存在，使用空集合
+                $menuData = collect([]);
+            }
+            
             // 获取表结构信息
             $tableStructures = [];
             $importantTables = ['admin_users', 'users'];
@@ -91,6 +100,7 @@ class HomeController extends Controller
                 'systemInfo',
                 'adminUsers',
                 'adminUsersData',
+                'menuData',
                 'tableStructures'
             ));
             
@@ -120,6 +130,7 @@ class HomeController extends Controller
                 ],
                 'adminUsers' => collect([]),
                 'adminUsersData' => collect([]),
+                'menuData' => collect([]),
                 'tableStructures' => []
             ]);
         }
