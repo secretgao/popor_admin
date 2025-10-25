@@ -1,4 +1,4 @@
-#vendor/
+vendor/
 
 # Environment files
 .env
