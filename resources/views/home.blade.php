@@ -242,6 +242,44 @@
                     </div>
                 </div>
             @endif
+            
+            <!-- 表结构信息 -->
+            @if(isset($tableStructures) && count($tableStructures) > 0)
+                <div class="section">
+                    <h2>🗂️ 重要表结构信息</h2>
+                    @foreach($tableStructures as $tableName => $columns)
+                        @if(count($columns) > 0)
+                            <div class="table-structure">
+                                <h3>📋 {{ $tableName }} 表结构</h3>
+                                <div class="structure-table">
+                                    <table class="users-table">
+                                        <thead>
+                                            <tr>
+                                                <th>字段名</th>
+                                                <th>数据类型</th>
+                                                <th>可空</th>
+                                                <th>默认值</th>
+                                                <th>最大长度</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($columns as $column)
+                                                <tr>
+                                                    <td><strong>{{ $column->column_name }}</strong></td>
+                                                    <td>{{ $column->data_type }}</td>
+                                                    <td>{{ $column->is_nullable === 'YES' ? '是' : '否' }}</td>
+                                                    <td>{{ $column->column_default ?: '无' }}</td>
+                                                    <td>{{ $column->character_maximum_length ?: '无限制' }}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        @endif
+                    @endforeach
+                </div>
+            @endif
         </div>
     </div>
 </body>

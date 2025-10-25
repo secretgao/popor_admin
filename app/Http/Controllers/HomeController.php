@@ -60,6 +60,25 @@ class HomeController extends Controller
             // 获取管理员用户数据
             $adminUsers = Administrator::all();
             
+            // 获取表结构信息
+            $tableStructures = [];
+            $importantTables = ['admin_users', 'users'];
+            
+            foreach ($importantTables as $tableName) {
+                try {
+                    $columns = DB::select("
+                        SELECT column_name, data_type, is_nullable, column_default, character_maximum_length
+                        FROM information_schema.columns 
+                        WHERE table_name = ? 
+                        ORDER BY ordinal_position
+                    ", [$tableName]);
+                    
+                    $tableStructures[$tableName] = $columns;
+                } catch (\Exception $e) {
+                    $tableStructures[$tableName] = [];
+                }
+            }
+            
             return view('home', compact(
                 'dbConfig', 
                 'dbStatus', 
@@ -67,7 +86,8 @@ class HomeController extends Controller
                 'tables', 
                 'envInfo', 
                 'systemInfo',
-                'adminUsers'
+                'adminUsers',
+                'tableStructures'
             ));
             
         } catch (\Exception $e) {
@@ -94,7 +114,8 @@ class HomeController extends Controller
                     'Memory Usage' => $this->formatBytes(memory_get_usage(true)),
                     'Peak Memory' => $this->formatBytes(memory_get_peak_usage(true)),
                 ],
-                'adminUsers' => collect([])
+                'adminUsers' => collect([]),
+                'tableStructures' => []
             ]);
         }
     }
