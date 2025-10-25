@@ -63,6 +63,15 @@ class InvoiceController extends AdminController
             $filter->between('created_at', '创建时间')->date();
         });
 
+        // 禁用创建按钮
+        $grid->disableCreateButton();
+        
+        // 禁用编辑和删除按钮
+        $grid->actions(function ($actions) {
+            $actions->disableEdit();
+            $actions->disableDelete();
+        });
+
         return $grid;
     }
 
