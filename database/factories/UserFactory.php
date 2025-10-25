@@ -17,17 +17,24 @@ class UserFactory extends Factory
     protected static ?string $password;
 
     /**
+     * Create a new factory instance.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->faker = \Faker\Factory::create();
+    }
+
+    /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
      */
     public function definition(): array
     {
-        $faker = app(\Faker\Generator::class);
-        
         return [
-            'name' => $faker->name(),
-            'email' => $faker->unique()->safeEmail(),
+            'name' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
