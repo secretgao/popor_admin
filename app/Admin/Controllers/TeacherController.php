@@ -36,7 +36,6 @@ class TeacherController extends BaseController
 
         $grid->column('id', 'ID')->sortable();
         $grid->column('username', '用户名')->sortable();
-        $grid->column('email', '邮箱')->sortable();
         $grid->column('is_del', '删除状态')->display(function ($value) {
             return $value ? '<span class="label label-danger">已删除</span>' : '<span class="label label-success">正常</span>';
         })->sortable();
@@ -64,8 +63,7 @@ class TeacherController extends BaseController
 
         // 搜索功能
         $grid->filter(function ($filter) {
-            $filter->like('name', '姓名');
-            $filter->like('email', '邮箱');
+            $filter->like('username', '用户名');
             $filter->equal('is_del', '删除状态')->select([
                 '' => '全部',
                 '0' => '正常',
@@ -110,7 +108,6 @@ class TeacherController extends BaseController
 
         $show->field('id', 'ID');
         $show->field('username', '用户名');
-        $show->field('email', '邮箱');
         $show->field('role_name', '角色')->as(function () {
             return '教师';
         });
@@ -147,7 +144,6 @@ class TeacherController extends BaseController
         $form = new Form(new AdminUser());
 
         $form->text('username', '用户名')->required()->rules('required|string|max:255');
-        $form->email('email', '邮箱')->required()->rules($this->getEmailRules($form));
         $form->password('password', '密码')->rules($this->getPasswordRules($form));
         $form->switch('is_active', '状态')->default(1);
 
