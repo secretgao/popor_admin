@@ -22,7 +22,8 @@ class UserFactory extends Factory
     public function __construct()
     {
         parent::__construct();
-        $this->faker = \Faker\Factory::create();
+        // 使用 Laravel 的 Faker 服务
+        $this->faker = app('Faker\Generator');
     }
 
     /**
