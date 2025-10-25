@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_active',
     ];
 
     /**
@@ -43,6 +44,46 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'is_active' => 'boolean',
+            'created_at' => 'datetime:Y-m-d H:i:s',
+            'updated_at' => 'datetime:Y-m-d H:i:s',
         ];
+    }
+
+    /**
+     * 时间格式
+     */
+    protected $dateFormat = 'Y-m-d H:i:s';
+
+    /**
+     * 学生选课关系
+     */
+    public function courseStudents()
+    {
+        return $this->hasMany(CourseStudent::class, 'student_id');
+    }
+
+    /**
+     * 学生的账单
+     */
+    public function invoices()
+    {
+        return $this->hasMany(Invoice::class, 'student_id');
+    }
+
+    /**
+     * 获取格式化的创建时间
+     */
+    public function getFormattedCreatedAtAttribute()
+    {
+        return $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : null;
+    }
+
+    /**
+     * 获取格式化的更新时间
+     */
+    public function getFormattedUpdatedAtAttribute()
+    {
+        return $this->updated_at ? $this->updated_at->format('Y-m-d H:i:s') : null;
     }
 }

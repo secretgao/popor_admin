@@ -56,7 +56,6 @@ class HomeController extends Controller
                 'Memory Usage' => $this->formatBytes(memory_get_usage(true)),
                 'Peak Memory' => $this->formatBytes(memory_get_peak_usage(true)),
             ];
-            
             // 获取管理员用户数据
             $adminUsers = Administrator::all();
             
