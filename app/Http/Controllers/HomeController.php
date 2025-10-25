@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Config;
+use Encore\Admin\Auth\Database\Administrator;
 
 class HomeController extends Controller
 {
@@ -56,13 +57,17 @@ class HomeController extends Controller
                 'Peak Memory' => $this->formatBytes(memory_get_peak_usage(true)),
             ];
             
+            // 获取管理员用户数据
+            $adminUsers = Administrator::all();
+            
             return view('home', compact(
                 'dbConfig', 
                 'dbStatus', 
                 'dbVersion', 
                 'tables', 
                 'envInfo', 
-                'systemInfo'
+                'systemInfo',
+                'adminUsers'
             ));
             
         } catch (\Exception $e) {
@@ -88,7 +93,8 @@ class HomeController extends Controller
                     'Timezone' => config('app.timezone'),
                     'Memory Usage' => $this->formatBytes(memory_get_usage(true)),
                     'Peak Memory' => $this->formatBytes(memory_get_peak_usage(true)),
-                ]
+                ],
+                'adminUsers' => collect([])
             ]);
         }
     }

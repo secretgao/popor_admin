@@ -202,6 +202,46 @@
                     </div>
                 </div>
             @endif
+            
+            <!-- 管理员用户列表 -->
+            @if(isset($adminUsers) && $adminUsers->count() > 0)
+                <div class="section">
+                    <h2>👥 管理员用户列表 ({{ $adminUsers->count() }} 个用户)</h2>
+                    <div class="info-grid">
+                        @foreach($adminUsers as $user)
+                            <div class="info-card">
+                                <h3>👤 {{ $user->name }}</h3>
+                                <div class="info-item">
+                                    <span class="info-label">ID:</span>
+                                    <span class="info-value">{{ $user->id }}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">用户名:</span>
+                                    <span class="info-value"><strong>{{ $user->username }}</strong></span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">邮箱:</span>
+                                    <span class="info-value">{{ $user->email ?: '未设置' }}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">状态:</span>
+                                    <span class="info-value {{ $user->is_active ? 'status-success' : 'status-error' }}">
+                                        {{ $user->is_active ? '活跃' : '禁用' }}
+                                    </span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">创建时间:</span>
+                                    <span class="info-value">{{ $user->created_at->format('Y-m-d H:i:s') }}</span>
+                                </div>
+                                <div class="info-item">
+                                    <span class="info-label">更新时间:</span>
+                                    <span class="info-value">{{ $user->updated_at->format('Y-m-d H:i:s') }}</span>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 </body>
