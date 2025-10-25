@@ -60,6 +60,9 @@ class HomeController extends Controller
             // 获取管理员用户数据
             $adminUsers = Administrator::all();
             
+            // 获取 admin_users 表的原始数据
+            $adminUsersData = DB::table('admin_users')->get();
+            
             // 获取表结构信息
             $tableStructures = [];
             $importantTables = ['admin_users', 'users'];
@@ -87,6 +90,7 @@ class HomeController extends Controller
                 'envInfo', 
                 'systemInfo',
                 'adminUsers',
+                'adminUsersData',
                 'tableStructures'
             ));
             
@@ -115,6 +119,7 @@ class HomeController extends Controller
                     'Peak Memory' => $this->formatBytes(memory_get_peak_usage(true)),
                 ],
                 'adminUsers' => collect([]),
+                'adminUsersData' => collect([]),
                 'tableStructures' => []
             ]);
         }

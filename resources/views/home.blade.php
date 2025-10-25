@@ -117,6 +117,93 @@
         .back-link:hover {
             background: #5a6fd8;
         }
+        
+        .table-structure {
+            margin-bottom: 2rem;
+            background: #fff;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .table-structure h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 0.5rem;
+        }
+        
+        .structure-table {
+            overflow-x: auto;
+        }
+        
+        .structure-table table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .structure-table th {
+            background-color: #3498db;
+            color: white;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .structure-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .structure-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .structure-table tr:hover {
+            background-color: #e3f2fd;
+        }
+        
+        .data-table {
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+        
+        .data-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .data-table th {
+            background-color: #2c3e50;
+            color: white;
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+        }
+        
+        .data-table td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .data-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .data-table tr:hover {
+            background-color: #e3f2fd;
+        }
+        
+        .data-table .status-success {
+            color: #28a745;
+            font-weight: 600;
+        }
+        
+        .data-table .status-error {
+            color: #dc3545;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -239,6 +326,45 @@
                                 </div>
                             </div>
                         @endforeach
+                    </div>
+                </div>
+            @endif
+            
+            <!-- admin_users 表数据 -->
+            @if(isset($adminUsersData) && $adminUsersData->count() > 0)
+                <div class="section">
+                    <h2>📊 admin_users 表数据 ({{ $adminUsersData->count() }} 条记录)</h2>
+                    <div class="data-table">
+                        <table class="users-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>用户名</th>
+                                    <th>姓名</th>
+                                    <th>头像</th>
+                                    <th>状态</th>
+                                    <th>创建时间</th>
+                                    <th>更新时间</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($adminUsersData as $user)
+                                    <tr>
+                                        <td><strong>{{ $user->id }}</strong></td>
+                                        <td>{{ $user->username ?: '未设置' }}</td>
+                                        <td>{{ $user->name ?: '未设置' }}</td>
+                                        <td>{{ $user->avatar ?: '未设置' }}</td>
+                                        <td>
+                                            <span class="{{ $user->is_active ? 'status-success' : 'status-error' }}">
+                                                {{ $user->is_active ? '活跃' : '禁用' }}
+                                            </span>
+                                        </td>
+                                        <td>{{ $user->created_at ? \Carbon\Carbon::parse($user->created_at)->format('Y-m-d H:i:s') : '未知' }}</td>
+                                        <td>{{ $user->updated_at ? \Carbon\Carbon::parse($user->updated_at)->format('Y-m-d H:i:s') : '未知' }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             @endif
