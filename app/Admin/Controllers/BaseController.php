@@ -34,13 +34,7 @@ abstract class BaseController extends AdminController
     protected function getUsernameRules($form, $table = 'users', $column = 'username')
     {
         return function ($form) use ($table, $column) {
-            $rules = 'required|string|max:255';
-            if ($form->isEditing()) {
-                $rules .= '|unique:' . $table . ',' . $column . ',' . $form->model()->id;
-            } else {
-                $rules .= '|unique:' . $table . ',' . $column;
-            }
-            return $rules;
+            return 'required|string|max:255';
         };
     }
 
