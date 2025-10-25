@@ -15,7 +15,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        // 运行管理员用户填充
+        $this->call(AdminUsersSeeder::class);
 
         // 检查是否已存在用户，避免重复创建
         if (User::where('email', 'test@example.com')->doesntExist()) {
