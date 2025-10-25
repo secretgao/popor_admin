@@ -331,23 +331,23 @@
             @endif
             
             <!-- admin_users 表数据 -->
-            @if(isset($adminUsersData) && $adminUsersData->count() > 0)
-                <div class="section">
-                    <h2>📊 admin_users 表数据 ({{ $adminUsersData->count() }} 条记录)</h2>
-                    <div class="data-table">
-                        <table class="users-table">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>用户名</th>
-                                    <th>姓名</th>
-                                    <th>头像</th>
-                                    <th>状态</th>
-                                    <th>创建时间</th>
-                                    <th>更新时间</th>
-                                </tr>
-                            </thead>
-                            <tbody>
+            <div class="section">
+                <h2>📊 admin_users 表数据 ({{ isset($adminUsersData) ? $adminUsersData->count() : 0 }} 条记录)</h2>
+                <div class="data-table">
+                    <table class="users-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>用户名</th>
+                                <th>姓名</th>
+                                <th>头像</th>
+                                <th>状态</th>
+                                <th>创建时间</th>
+                                <th>更新时间</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if(isset($adminUsersData) && $adminUsersData->count() > 0)
                                 @foreach($adminUsersData as $user)
                                     <tr>
                                         <td><strong>{{ $user->id }}</strong></td>
@@ -363,11 +363,17 @@
                                         <td>{{ $user->updated_at ? \Carbon\Carbon::parse($user->updated_at)->format('Y-m-d H:i:s') : '未知' }}</td>
                                     </tr>
                                 @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                            @else
+                                <tr>
+                                    <td colspan="7" style="text-align: center; color: #666; padding: 2rem;">
+                                        暂无数据
+                                    </td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
                 </div>
-            @endif
+            </div>
             
             <!-- 表结构信息 -->
             @if(isset($tableStructures) && count($tableStructures) > 0)
