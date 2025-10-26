@@ -4,11 +4,8 @@ namespace App\Admin\Controllers;
 
 use App\Models\WebhookEvent;
 use Encore\Admin\Controllers\AdminController;
-use Encore\Admin\Form;
 use Encore\Admin\Grid;
 use Encore\Admin\Show;
-use Encore\Admin\Layout\Content;
-use Illuminate\Http\Request;
 
 class WebhookEventController extends AdminController
 {
@@ -69,16 +66,20 @@ class WebhookEventController extends AdminController
         $grid->column('processed_at', '处理时间')->sortable();
         $grid->column('created_at', '创建时间')->sortable();
         
-        // 操作列
+        // 操作列 - 只允许查看
         $grid->actions(function ($actions) {
             $actions->disableDelete(); // 禁用删除
-            $actions->disableEdit();   // 禁用编辑（只允许查看）
+            $actions->disableEdit();   // 禁用编辑
+            $actions->disableCreate(); // 禁用创建
         });
 
-        // 批量操作
+        // 批量操作 - 禁用所有批量操作
         $grid->batchActions(function ($batch) {
             $batch->disableDelete(); // 禁用批量删除
         });
+
+        // 禁用创建按钮
+        $grid->disableCreate();
 
         // 设置每页显示数量
         $grid->paginate(20);
@@ -126,60 +127,4 @@ class WebhookEventController extends AdminController
         return $show;
     }
 
-    /**
-     * Make a form builder.
-     *
-     * @return Form
-     */
-    protected function form()
-    {
-        $form = new Form(new WebhookEvent());
-
-        $form->display('id', 'ID');
-        $form->text('event_id', '事件ID')->required();
-        $form->select('type', '事件类型')->options([
-            'charge.complete' => '支付完成',
-            'charge.failed' => '支付失败',
-            'refund.created' => '退款创建',
-        ])->required();
-        
-        $form->select('process_status', '处理状态')->options([
-            WebhookEvent::STATUS_PENDING => '待处理',
-            WebhookEvent::STATUS_PROCESSED => '已处理',
-            WebhookEvent::STATUS_FAILED => '处理失败',
-        ])->required();
-        
-        $form->datetime('event_created_at', '事件时间');
-        $form->datetime('processed_at', '处理时间');
-        $form->textarea('error_message', '错误信息');
-        $form->json('payload', '事件载荷');
-
-        return $form;
-    }
-
-    /**
-     * 重写编辑方法，允许编辑
-     */
-    public function edit($id, Content $content)
-    {
-        return $content
-            ->title($this->title())
-            ->description('编辑')
-            ->body($this->form()->edit($id));
-    }
-
-    /**
-     * 重写更新方法
-     */
-    public function update($id, Request $request)
-    {
-        $webhookEvent = WebhookEvent::findOrFail($id);
-        
-        // 更新数据
-        $webhookEvent->update($request->all());
-        
-        admin_success('更新成功！');
-        
-        return redirect()->back();
-    }
 }
