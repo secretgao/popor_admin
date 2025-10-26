@@ -57,12 +57,6 @@ class InvoiceController extends AdminController
             };
             return "<span class='label {$class}'>{$statusName}</span>";
         });
-        $grid->column('due_date', '到期时间')->display(function ($dueDate) {
-            return $dueDate ? $dueDate->format('Y-m-d H:i:s') : '-';
-        });
-        $grid->column('sent_at', '发送时间')->display(function ($sentAt) {
-            return $sentAt ? $sentAt->format('Y-m-d H:i:s') : '-';
-        });
         $grid->column('formatted_paid_at', '支付时间');
         $grid->column('omise_charge_id', 'Omise Charge ID');
         $grid->column('omise_source_id', 'Omise Source ID');
@@ -79,9 +73,7 @@ class InvoiceController extends AdminController
         });
         $grid->column('formatted_payment_processed_at', '处理时间');
         $grid->column('formatted_created_at', '创建时间')->sortable();
-        $grid->column('updated_at', '更新时间')->display(function ($updatedAt) {
-            return $updatedAt ? $updatedAt->format('Y-m-d H:i:s') : '-';
-        });
+        $grid->column('formatted_updated_at', '更新时间');
 
         // 搜索功能
         $grid->filter(function ($filter) {
@@ -157,11 +149,10 @@ class InvoiceController extends AdminController
             2 => '支付成功',
             3 => '支付失败',
         ])->default(0);
-        $form->datetime('sent_at', '发送时间');
         $form->datetime('paid_at', '支付时间');
         $form->text('omise_charge_id', 'Omise Charge ID');
         $form->text('payment_method', '支付方式');
-        $form->text('currency', '币种')->default('THB');
+        $form->text('currency', '币种')->default('JPY');
 
         // 禁用查看、创建和编辑检查
         $form->disableViewCheck();

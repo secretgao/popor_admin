@@ -13,7 +13,6 @@ class Invoice extends Model
         'year_month',
         'amount',
         'status',
-        'sent_at',
         'omise_charge_id',
         'omise_source_id',
         'omise_last_event_id',
@@ -29,7 +28,6 @@ class Invoice extends Model
 
     protected $casts = [
         'amount' => 'decimal:2',
-        'sent_at' => 'datetime',
         'paid_at' => 'datetime',
         'payment_success' => 'boolean',
         'payment_processed_at' => 'datetime',
@@ -38,7 +36,8 @@ class Invoice extends Model
     protected $appends = [
         'formatted_paid_at',
         'formatted_created_at',
-        'formatted_payment_processed_at'
+        'formatted_payment_processed_at',
+        'formatted_updated_at'
     ];
 
     /**
@@ -133,5 +132,13 @@ class Invoice extends Model
     public function getFormattedPaymentProcessedAtAttribute()
     {
         return $this->payment_processed_at ? $this->payment_processed_at->format('Y-m-d H:i:s') : null;
+    }
+
+    /**
+     * 获取格式化的更新时间
+     */
+    public function getFormattedUpdatedAtAttribute()
+    {
+        return $this->updated_at ? $this->updated_at->format('Y-m-d H:i:s') : null;
     }
 }
