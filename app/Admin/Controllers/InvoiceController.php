@@ -95,8 +95,7 @@ class InvoiceController extends AdminController
         // 禁用编辑按钮，启用删除按钮
         $grid->actions(function ($actions) {
             $actions->disableEdit();
-            // 启用删除操作
-            $actions->enableDelete();
+            // 删除操作默认启用，不需要额外配置
         });
 
         return $grid;
