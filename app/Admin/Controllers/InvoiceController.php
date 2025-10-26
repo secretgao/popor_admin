@@ -165,10 +165,19 @@ class InvoiceController extends AdminController
 
     /**
      * 重写删除方法，使用真实物理删除
+     * 只允许删除 status = 0 (待发送) 的数据
      */
     public function destroy($id)
     {
         $invoice = Invoice::findOrFail($id);
+        
+        // 检查状态，只允许删除待发送状态的账单
+        if ($invoice->status !== 0) {
+            return response()->json([
+                'status' => false,
+                'message' => '只能删除待发送状态的账单！'
+            ]);
+        }
         
         // 真实物理删除数据
         $invoice->delete();
