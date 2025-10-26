@@ -103,27 +103,45 @@
             </div>
             <div class="box-body">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <div class="info-box">
                             <span class="info-box-icon bg-yellow"><i class="fa fa-clock"></i></span>
                             <div class="info-box-content">
-                                <span class="info-box-text">待处理</span>
+                                <span class="info-box-text">待支付</span>
                                 <span class="info-box-number">{{ $pendingInvoices }}</span>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-blue"><i class="fa fa-spinner"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">支付中</span>
+                                <span class="info-box-number">{{ $processingInvoices }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
                         <div class="info-box">
                             <span class="info-box-icon bg-green"><i class="fa fa-check"></i></span>
                             <div class="info-box-content">
-                                <span class="info-box-text">已支付</span>
+                                <span class="info-box-text">支付成功</span>
                                 <span class="info-box-number">{{ $paidInvoices }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="info-box">
+                            <span class="info-box-icon bg-red"><i class="fa fa-times"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">支付失败</span>
+                                <span class="info-box-number">{{ $failedInvoices }}</span>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4">
                         <div class="info-box">
-                            <span class="info-box-icon bg-blue"><i class="fa fa-money"></i></span>
+                            <span class="info-box-icon bg-purple"><i class="fa fa-money"></i></span>
                             <div class="info-box-content">
                                 <span class="info-box-text">总收入</span>
                                 <span class="info-box-number">¥{{ number_format($totalAmount, 2) }}</span>

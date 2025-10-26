@@ -31,10 +31,10 @@ class Invoice extends Model
     /**
      * 账单状态常量
      */
-    const STATUS_PENDING = 0;
-    const STATUS_SENT = 1;
-    const STATUS_PAID = 2;
-    const STATUS_CANCELLED = 3;
+    const STATUS_PENDING = 0;      // 待支付
+    const STATUS_PROCESSING = 1;    // 支付中
+    const STATUS_PAID = 2;         // 支付成功
+    const STATUS_FAILED = 3;       // 支付失败
 
     /**
      * 关联课程
@@ -58,10 +58,10 @@ class Invoice extends Model
     public function getStatusNameAttribute(): string
     {
         return match($this->status) {
-            self::STATUS_PENDING => '待处理',
-            self::STATUS_SENT => '已发送',
-            self::STATUS_PAID => '已支付',
-            self::STATUS_CANCELLED => '已取消',
+            self::STATUS_PENDING => '待支付',
+            self::STATUS_PROCESSING => '支付中',
+            self::STATUS_PAID => '支付成功',
+            self::STATUS_FAILED => '支付失败',
             default => '未知状态',
         };
     }
@@ -79,6 +79,46 @@ class Invoice extends Model
      */
     public function canCancel(): bool
     {
-        return in_array($this->status, [self::STATUS_PENDING, self::STATUS_SENT]);
+        return $this->status === self::STATUS_PENDING;
+    }
+    
+    /**
+     * 判断是否正在支付中
+     */
+    public function isProcessing(): bool
+    {
+        return $this->status === self::STATUS_PROCESSING;
+    }
+    
+    /**
+     * 判断是否支付失败
+     */
+    public function isFailed(): bool
+    {
+        return $this->status === self::STATUS_FAILED;
+    }
+
+    /**
+     * 获取格式化的发送时间
+     */
+    public function getFormattedSentAtAttribute()
+    {
+        return $this->sent_at ? $this->sent_at->format('Y-m-d H:i:s') : null;
+    }
+
+    /**
+     * 获取格式化的支付时间
+     */
+    public function getFormattedPaidAtAttribute()
+    {
+        return $this->paid_at ? $this->paid_at->format('Y-m-d H:i:s') : null;
+    }
+
+    /**
+     * 获取格式化的创建时间
+     */
+    public function getFormattedCreatedAtAttribute()
+    {
+        return $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : null;
     }
 }

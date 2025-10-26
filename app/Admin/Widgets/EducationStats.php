@@ -33,7 +33,9 @@ class EducationStats extends Widget
 
         // 获取账单状态统计
         $pendingInvoices = Invoice::where('status', Invoice::STATUS_PENDING)->count();
+        $processingInvoices = Invoice::where('status', Invoice::STATUS_PROCESSING)->count();
         $paidInvoices = Invoice::where('status', Invoice::STATUS_PAID)->count();
+        $failedInvoices = Invoice::where('status', Invoice::STATUS_FAILED)->count();
         $totalAmount = Invoice::where('status', Invoice::STATUS_PAID)->sum('amount');
 
         return view('admin.widgets.education-stats', compact(
@@ -44,7 +46,9 @@ class EducationStats extends Widget
             'activeTeacherCount',
             'activeStudentCount',
             'pendingInvoices',
+            'processingInvoices',
             'paidInvoices',
+            'failedInvoices',
             'totalAmount'
         ));
     }

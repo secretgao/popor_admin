@@ -35,30 +35,36 @@ class InvoiceController extends AdminController
         $grid->column('amount', '金额')->display(function ($amount) {
             return '¥' . number_format($amount, 2);
         });
-        $grid->column('status_name', '状态')->display(function ($statusName) {
-            $status = $this->status;
+        $grid->column('status', '状态')->display(function ($status) {
+            $statusName = match($status) {
+                0 => '待支付',
+                1 => '支付中',
+                2 => '支付成功',
+                3 => '支付失败',
+                default => '未知状态',
+            };
             $class = match($status) {
-                Invoice::STATUS_PENDING => 'label-warning',
-                Invoice::STATUS_SENT => 'label-info',
-                Invoice::STATUS_PAID => 'label-success',
-                Invoice::STATUS_CANCELLED => 'label-danger',
+                0 => 'label-warning',    // 待支付
+                1 => 'label-info',       // 支付中
+                2 => 'label-success',    // 支付成功
+                3 => 'label-danger',     // 支付失败
                 default => 'label-default',
             };
             return "<span class='label {$class}'>{$statusName}</span>";
         });
-        $grid->column('sent_at', '发送时间');
-        $grid->column('paid_at', '支付时间');
-        $grid->column('created_at', '创建时间')->sortable();
+        $grid->column('formatted_sent_at', '发送时间');
+        $grid->column('formatted_paid_at', '支付时间');
+        $grid->column('formatted_created_at', '创建时间')->sortable();
 
         // 搜索功能
         $grid->filter(function ($filter) {
             $filter->like('course.name', '课程名称');
             $filter->like('student.name', '学生姓名');
             $filter->equal('status', '状态')->select([
-                Invoice::STATUS_PENDING => '待处理',
-                Invoice::STATUS_SENT => '已发送',
-                Invoice::STATUS_PAID => '已支付',
-                Invoice::STATUS_CANCELLED => '已取消',
+                0 => '待支付',
+                1 => '支付中',
+                2 => '支付成功',
+                3 => '支付失败',
             ]);
             $filter->between('created_at', '创建时间')->date();
         });
@@ -118,11 +124,11 @@ class InvoiceController extends AdminController
         $form->text('year_month', '年月')->required()->rules('required|string|size:6')->help('格式：202501');
         $form->currency('amount', '金额')->required()->rules('required|numeric|min:0')->symbol('¥');
         $form->select('status', '状态')->options([
-            Invoice::STATUS_PENDING => '待处理',
-            Invoice::STATUS_SENT => '已发送',
-            Invoice::STATUS_PAID => '已支付',
-            Invoice::STATUS_CANCELLED => '已取消',
-        ])->default(Invoice::STATUS_PENDING);
+            0 => '待支付',
+            1 => '支付中',
+            2 => '支付成功',
+            3 => '支付失败',
+        ])->default(0);
         $form->datetime('sent_at', '发送时间');
         $form->datetime('paid_at', '支付时间');
         $form->text('omise_charge_id', 'Omise Charge ID');
