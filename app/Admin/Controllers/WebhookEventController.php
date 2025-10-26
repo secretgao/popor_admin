@@ -16,6 +16,7 @@ class WebhookEventController extends AdminController
      */
     protected $title = 'Webhook 事件管理';
 
+
     /**
      * Make a grid builder.
      *
@@ -44,7 +45,7 @@ class WebhookEventController extends AdminController
             $filter->between('created_at', '创建时间')->datetime();
         });
 
-        // 列配置
+        // 列配置 - 显示所有字段
         $grid->column('id', 'ID')->sortable();
         $grid->column('event_id', '事件ID')->copyable();
         $grid->column('type', '事件类型')->display(function ($type) {
@@ -56,30 +57,62 @@ class WebhookEventController extends AdminController
             return $types[$type] ?? $type;
         })->label('info');
         
+        $grid->column('payload', '事件载荷')->display(function ($payload) {
+            if (is_array($payload)) {
+                return '<pre style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;">' . 
+                       htmlspecialchars(json_encode($payload, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)) . 
+                       '</pre>';
+            }
+            return $payload;
+        });
+        
         $grid->column('process_status', '处理状态')->display(function ($status) {
             $model = new WebhookEvent();
             $model->process_status = $status;
             return "<span class='label label-{$model->status_color}'>{$model->status_label}</span>";
         });
         
-        $grid->column('event_created_at', '事件时间')->sortable();
-        $grid->column('processed_at', '处理时间')->sortable();
-        $grid->column('created_at', '创建时间')->sortable();
+        $grid->column('event_created_at', '事件时间')->display(function () {
+            try {
+                return $this->formatted_event_created_at ?: '未知';
+            } catch (\Exception $e) {
+                return '未知';
+            }
+        })->sortable();
         
-        // 操作列 - 只允许查看
-        $grid->actions(function ($actions) {
-            $actions->disableDelete(); // 禁用删除
-            $actions->disableEdit();   // 禁用编辑
-            $actions->disableCreate(); // 禁用创建
+        $grid->column('processed_at', '处理时间')->display(function () {
+            try {
+                return $this->formatted_processed_at ?: '未知';
+            } catch (\Exception $e) {
+                return '未知';
+            }
+        })->sortable();
+        
+        $grid->column('error_message', '错误信息')->display(function ($message) {
+            return $message ?: '无';
         });
-
-        // 批量操作 - 禁用所有批量操作
-        $grid->batchActions(function ($batch) {
-            $batch->disableDelete(); // 禁用批量删除
-        });
-
-        // 禁用创建按钮
-        $grid->disableCreate();
+        
+        $grid->column('created_at', '创建时间')->display(function () {
+            try {
+                return $this->formatted_created_at ?: '未知';
+            } catch (\Exception $e) {
+                return '未知';
+            }
+        })->sortable();
+        
+        $grid->column('updated_at', '更新时间')->display(function () {
+            try {
+                return $this->formatted_updated_at ?: '未知';
+            } catch (\Exception $e) {
+                return '未知';
+            }
+        })->sortable();
+        
+        // 禁用创建按钮--只能通过系统自动创建
+        $grid->disableCreateButton();
+        
+        // 禁用所有操作列
+        $grid->disableActions();
 
         // 设置每页显示数量
         $grid->paginate(20);

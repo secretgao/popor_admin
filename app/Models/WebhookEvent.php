@@ -102,4 +102,36 @@ class WebhookEvent extends Model
             default => 'info'
         };
     }
+
+    /**
+     * 获取格式化的创建时间
+     */
+    public function getFormattedCreatedAtAttribute()
+    {
+        return $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : '未知';
+    }
+
+    /**
+     * 获取格式化的更新时间
+     */
+    public function getFormattedUpdatedAtAttribute()
+    {
+        return $this->updated_at ? $this->updated_at->format('Y-m-d H:i:s') : '未知';
+    }
+
+    /**
+     * 获取格式化的事件时间
+     */
+    public function getFormattedEventCreatedAtAttribute()
+    {
+        return $this->event_created_at ? $this->event_created_at->format('Y-m-d H:i:s') : '未知';
+    }
+
+    /**
+     * 获取格式化的处理时间
+     */
+    public function getFormattedProcessedAtAttribute()
+    {
+        return $this->processed_at ? $this->processed_at->format('Y-m-d H:i:s') : '未知';
+    }
 }
