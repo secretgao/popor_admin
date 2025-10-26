@@ -41,10 +41,11 @@ class Invoice extends Model
     /**
      * 账单状态常量
      */
-    const STATUS_PENDING = 0;      // 待支付
-    const STATUS_PROCESSING = 1;    // 支付中
-    const STATUS_PAID = 2;         // 支付成功
-    const STATUS_FAILED = 3;       // 支付失败
+    const STATUS_DRAFT = 0;        // 待发送
+    const STATUS_PENDING = 1;      // 待支付
+    const STATUS_PROCESSING = 2;   // 支付中
+    const STATUS_PAID = 3;         // 支付成功
+    const STATUS_FAILED = 4;       // 支付失败
 
     /**
      * 关联课程

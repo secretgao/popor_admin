@@ -43,19 +43,19 @@ class InvoiceController extends AdminController
         });
         $grid->column('status', '状态')->display(function ($status) {
             $statusName = match($status) {
-                0 => '待支付',
-                1 => '支付中',
-                2 => '支付成功',
-                3 => '支付失败',
-                4 => '已退款',
+                0 => '待发送',
+                1 => '待支付',
+                2 => '支付中',
+                3 => '支付成功',
+                4 => '支付失败',
                 default => '未知状态',
             };
             $class = match($status) {
-                0 => 'label-warning',    // 待支付
-                1 => 'label-info',       // 支付中
-                2 => 'label-success',    // 支付成功
-                3 => 'label-danger',     // 支付失败
-                4 => 'label-default',    // 已退款
+                0 => 'label-default',    // 待发送
+                1 => 'label-warning',    // 待支付
+                2 => 'label-info',       // 支付中
+                3 => 'label-success',    // 支付成功
+                4 => 'label-danger',     // 支付失败
                 default => 'label-default',
             };
             return "<span class='label {$class}'>{$statusName}</span>";
@@ -80,11 +80,11 @@ class InvoiceController extends AdminController
             $filter->like('course.name', '课程名称');
             $filter->like('student.name', '学生姓名');
             $filter->equal('status', '状态')->select([
-                0 => '待支付',
-                1 => '支付中',
-                2 => '支付成功',
-                3 => '支付失败',
-                4 => '已退款',
+                0 => '待发送',
+                1 => '待支付',
+                2 => '支付中',
+                3 => '支付成功',
+                4 => '支付失败',
             ]);
             $filter->between('created_at', '创建时间')->date();
         });
@@ -144,10 +144,11 @@ class InvoiceController extends AdminController
         $form->currency('amount', '金额')->required()->rules('required|numeric|min:0')->symbol('¥');
         $form->textarea('description', '账单描述')->rows(3);
         $form->select('status', '状态')->options([
-            0 => '待支付',
-            1 => '支付中',
-            2 => '支付成功',
-            3 => '支付失败',
+            0 => '待发送',
+            1 => '待支付',
+            2 => '支付中',
+            3 => '支付成功',
+            4 => '支付失败',
         ])->default(0);
         $form->datetime('paid_at', '支付时间');
         $form->text('omise_charge_id', 'Omise Charge ID');
