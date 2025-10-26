@@ -59,8 +59,6 @@ class InvoiceController extends AdminController
         });
         $grid->column('formatted_paid_at', '支付时间');
         $grid->column('omise_charge_id', 'Omise Charge ID');
-        $grid->column('omise_source_id', 'Omise Source ID');
-        $grid->column('omise_last_event_id', 'Omise Last Event ID');
         $grid->column('payment_method', '支付方式');
         $grid->column('currency', '币种');
         $grid->column('payment_success', '支付成功')->display(function ($success) {
