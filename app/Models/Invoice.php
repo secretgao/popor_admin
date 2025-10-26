@@ -28,6 +28,11 @@ class Invoice extends Model
         'paid_at' => 'datetime',
     ];
 
+    protected $appends = [
+        'formatted_paid_at',
+        'formatted_created_at'
+    ];
+
     /**
      * 账单状态常量
      */
