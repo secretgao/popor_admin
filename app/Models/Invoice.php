@@ -20,17 +20,25 @@ class Invoice extends Model
         'paid_at',
         'payment_method',
         'currency',
+        'payment_success',
+        'payment_status',
+        'payment_transaction_id',
+        'payment_error_message',
+        'payment_processed_at',
     ];
 
     protected $casts = [
         'amount' => 'decimal:2',
         'sent_at' => 'datetime',
         'paid_at' => 'datetime',
+        'payment_success' => 'boolean',
+        'payment_processed_at' => 'datetime',
     ];
 
     protected $appends = [
         'formatted_paid_at',
-        'formatted_created_at'
+        'formatted_created_at',
+        'formatted_payment_processed_at'
     ];
 
     /**
@@ -117,5 +125,13 @@ class Invoice extends Model
     public function getFormattedCreatedAtAttribute()
     {
         return $this->created_at ? $this->created_at->format('Y-m-d H:i:s') : null;
+    }
+
+    /**
+     * 获取格式化的支付处理时间
+     */
+    public function getFormattedPaymentProcessedAtAttribute()
+    {
+        return $this->payment_processed_at ? $this->payment_processed_at->format('Y-m-d H:i:s') : null;
     }
 }
