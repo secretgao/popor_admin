@@ -18,4 +18,7 @@
  *
  */
 
+// 设置管理后台语言为中文
+app()->setLocale('zh-CN');
+
 Encore\Admin\Form::forget(['map', 'editor']);
