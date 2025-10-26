@@ -29,6 +29,9 @@ class InvoiceController extends AdminController
         $grid = new Grid(new Invoice());
 
         $grid->column('id', 'ID')->sortable();
+        $grid->column('student_id', '学生ID');
+        $grid->column('course_id', '课程ID');
+        $grid->column('teacher_id', '教师ID');
         $grid->column('course.name', '课程名称');
         $grid->column('student.name', '学生姓名');
         $grid->column('year_month', '年月');
@@ -41,6 +44,7 @@ class InvoiceController extends AdminController
                 1 => '支付中',
                 2 => '支付成功',
                 3 => '支付失败',
+                4 => '已退款',
                 default => '未知状态',
             };
             $class = match($status) {
@@ -48,12 +52,36 @@ class InvoiceController extends AdminController
                 1 => 'label-info',       // 支付中
                 2 => 'label-success',    // 支付成功
                 3 => 'label-danger',     // 支付失败
+                4 => 'label-default',    // 已退款
                 default => 'label-default',
             };
             return "<span class='label {$class}'>{$statusName}</span>";
         });
+        $grid->column('due_date', '到期时间')->display(function ($dueDate) {
+            return $dueDate ? $dueDate->format('Y-m-d H:i:s') : '-';
+        });
+        $grid->column('sent_at', '发送时间')->display(function ($sentAt) {
+            return $sentAt ? $sentAt->format('Y-m-d H:i:s') : '-';
+        });
         $grid->column('formatted_paid_at', '支付时间');
+        $grid->column('omise_charge_id', 'Omise Charge ID');
+        $grid->column('omise_source_id', 'Omise Source ID');
+        $grid->column('omise_last_event_id', 'Omise Last Event ID');
+        $grid->column('payment_method', '支付方式');
+        $grid->column('currency', '币种');
+        $grid->column('payment_success', '支付成功')->display(function ($success) {
+            return $success ? '<span class="label label-success">是</span>' : '<span class="label label-danger">否</span>';
+        });
+        $grid->column('payment_status', '支付状态');
+        $grid->column('payment_transaction_id', '交易ID');
+        $grid->column('payment_error_message', '错误信息')->display(function ($error) {
+            return $error ?: '-';
+        });
+        $grid->column('formatted_payment_processed_at', '处理时间');
         $grid->column('formatted_created_at', '创建时间')->sortable();
+        $grid->column('updated_at', '更新时间')->display(function ($updatedAt) {
+            return $updatedAt ? $updatedAt->format('Y-m-d H:i:s') : '-';
+        });
 
         // 搜索功能
         $grid->filter(function ($filter) {
@@ -64,6 +92,7 @@ class InvoiceController extends AdminController
                 1 => '支付中',
                 2 => '支付成功',
                 3 => '支付失败',
+                4 => '已退款',
             ]);
             $filter->between('created_at', '创建时间')->date();
         });
