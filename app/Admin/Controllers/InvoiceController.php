@@ -38,6 +38,9 @@ class InvoiceController extends AdminController
         $grid->column('amount', '金额')->display(function ($amount) {
             return '¥' . number_format($amount, 2);
         });
+        $grid->column('description', '账单描述')->display(function ($description) {
+            return $description ? (strlen($description) > 50 ? substr($description, 0, 50) . '...' : $description) : '-';
+        });
         $grid->column('status', '状态')->display(function ($status) {
             $statusName = match($status) {
                 0 => '待支付',
@@ -139,6 +142,7 @@ class InvoiceController extends AdminController
         $form->select('student_id', '学生')->options(User::pluck('name', 'id'))->required();
         $form->text('year_month', '年月')->required()->rules('required|string|size:6')->help('格式：202501');
         $form->currency('amount', '金额')->required()->rules('required|numeric|min:0')->symbol('¥');
+        $form->textarea('description', '账单描述')->rows(3);
         $form->select('status', '状态')->options([
             0 => '待支付',
             1 => '支付中',
