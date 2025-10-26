@@ -92,10 +92,11 @@ class InvoiceController extends AdminController
         // 禁用创建按钮
         $grid->disableCreateButton();
         
-        // 禁用编辑和删除按钮
+        // 禁用编辑按钮，启用删除按钮
         $grid->actions(function ($actions) {
             $actions->disableEdit();
-            $actions->disableDelete();
+            // 启用删除操作
+            $actions->enableDelete();
         });
 
         return $grid;
@@ -154,29 +155,23 @@ class InvoiceController extends AdminController
         $form->text('omise_charge_id', 'Omise Charge ID');
         $form->text('currency', '币种')->default('JPY');
 
-        // 禁用查看、创建和编辑检查
+        // 禁用查看、创建和编辑检查，启用删除检查
         $form->disableViewCheck();
         $form->disableCreatingCheck();
         $form->disableEditingCheck();
+        $form->disableDeletingCheck();
 
         return $form;
     }
 
     /**
-     * 重写删除方法，使用软删除
+     * 重写删除方法，使用真实物理删除
      */
     public function destroy($id)
     {
         $invoice = Invoice::findOrFail($id);
         
-        // 检查是否已支付
-        if ($invoice->isPaid()) {
-            return response()->json([
-                'status' => false,
-                'message' => '已支付的账单无法删除！'
-            ]);
-        }
-
+        // 真实物理删除数据
         $invoice->delete();
 
         return response()->json([
