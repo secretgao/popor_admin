@@ -59,7 +59,6 @@ class InvoiceController extends AdminController
         });
         $grid->column('formatted_paid_at', '支付时间');
         $grid->column('omise_charge_id', 'Omise Charge ID');
-        $grid->column('payment_method', '支付方式');
         $grid->column('currency', '币种');
         $grid->column('payment_success', '支付成功')->display(function ($success) {
             return $success ? '<span class="label label-success">是</span>' : '<span class="label label-danger">否</span>';
@@ -120,7 +119,6 @@ class InvoiceController extends AdminController
         $show->field('sent_at', '发送时间');
         $show->field('paid_at', '支付时间');
         $show->field('omise_charge_id', 'Omise Charge ID');
-        $show->field('payment_method', '支付方式');
         $show->field('currency', '币种');
         $show->field('created_at', '创建时间');
         $show->field('updated_at', '更新时间');
@@ -149,7 +147,6 @@ class InvoiceController extends AdminController
         ])->default(0);
         $form->datetime('paid_at', '支付时间');
         $form->text('omise_charge_id', 'Omise Charge ID');
-        $form->text('payment_method', '支付方式');
         $form->text('currency', '币种')->default('JPY');
 
         // 禁用查看、创建和编辑检查
