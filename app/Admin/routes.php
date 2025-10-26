@@ -18,5 +18,8 @@ Route::group([
     $router->resource('students', 'StudentController');
     $router->resource('courses', 'CourseController');
     $router->resource('invoices', 'InvoiceController');
+    
+    // Webhook 事件管理路由
+    $router->resource('webhook-events', 'WebhookEventController');
 
 });
