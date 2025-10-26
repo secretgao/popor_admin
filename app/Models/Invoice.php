@@ -99,14 +99,6 @@ class Invoice extends Model
     }
 
     /**
-     * 获取格式化的发送时间
-     */
-    public function getFormattedSentAtAttribute()
-    {
-        return $this->sent_at ? $this->sent_at->format('Y-m-d H:i:s') : null;
-    }
-
-    /**
      * 获取格式化的支付时间
      */
     public function getFormattedPaidAtAttribute()

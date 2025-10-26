@@ -52,7 +52,6 @@ class InvoiceController extends AdminController
             };
             return "<span class='label {$class}'>{$statusName}</span>";
         });
-        $grid->column('formatted_sent_at', '发送时间');
         $grid->column('formatted_paid_at', '支付时间');
         $grid->column('formatted_created_at', '创建时间')->sortable();
 
